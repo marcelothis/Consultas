@@ -40,8 +40,21 @@ namespace Servicos
             {
                 if (consultaVeicular(url, "placa=" + listVeiculos[i].placa + "&renavam=" + listVeiculos[i].renavam + "&btnConsultaPlaca="))
                 {
-                    resultado.Add(listVeiculos[i]);
+                    var retorno = "{\"placa\":\"" + listVeiculos[i].placa + "\", \"renavam\":\"" + listVeiculos[i].renavam + "\", \"status\":\"sucesso\"}";
+                    Veiculo v;
+                    v = JsonConvert.DeserializeObject<Veiculo>(retorno);
+                    //resultado.Add(listVeiculos[i]);
+                    resultado.Add(v);
                 }
+                else
+                {
+                    var retorno = "{\"placa\":\"" + listVeiculos[i].placa + "\", \"renavam\":\"" + listVeiculos[i].renavam + "\", \"status\":\"semRestricao\"}";
+                    Veiculo v;
+                    v = JsonConvert.DeserializeObject<Veiculo>(retorno);
+                    //resultado.Add(listVeiculos[i]);
+                    resultado.Add(v);
+                }
+
 
             }
 

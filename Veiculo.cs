@@ -9,5 +9,6 @@ namespace Servicos
     {
         public string placa { get; set; }
         public string renavam { get; set; }
+        public string status { get; set; }
     }
 }
