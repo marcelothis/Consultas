@@ -38,15 +38,17 @@ namespace Servicos
 
             for (int i = 0; i < listVeiculos.Count; i++)
             {
-                if (consultaVeicular(url, "placa=" + listVeiculos[i].placa + "&renavam=" + listVeiculos[i].renavam + "&btnConsultaPlaca="))
+                var consulta = consultaVeicular(url, "placa=" + listVeiculos[i].placa + "&renavam=" + listVeiculos[i].renavam + "&btnConsultaPlaca=");
+
+                if (consulta == "comRestricao")
                 {
-                    var retorno = "{\"placa\":\"" + listVeiculos[i].placa + "\", \"renavam\":\"" + listVeiculos[i].renavam + "\", \"status\":\"sucesso\"}";
+                    var retorno = "{\"placa\":\"" + listVeiculos[i].placa + "\", \"renavam\":\"" + listVeiculos[i].renavam + "\", \"status\":\"comRestricao\"}";
                     Veiculo v;
                     v = JsonConvert.DeserializeObject<Veiculo>(retorno);
                     //resultado.Add(listVeiculos[i]);
                     resultado.Add(v);
                 }
-                else
+                if(consulta == "semRestricao")
                 {
                     var retorno = "{\"placa\":\"" + listVeiculos[i].placa + "\", \"renavam\":\"" + listVeiculos[i].renavam + "\", \"status\":\"semRestricao\"}";
                     Veiculo v;
@@ -54,7 +56,14 @@ namespace Servicos
                     //resultado.Add(listVeiculos[i]);
                     resultado.Add(v);
                 }
-
+                if (consulta == "naoExiste")
+                {
+                    var retorno = "{\"placa\":\"" + listVeiculos[i].placa + "\", \"renavam\":\"" + listVeiculos[i].renavam + "\", \"status\":\"naoExiste\"}";
+                    Veiculo v;
+                    v = JsonConvert.DeserializeObject<Veiculo>(retorno);
+                    //resultado.Add(listVeiculos[i]);
+                    resultado.Add(v);
+                }
 
             }
 
@@ -63,7 +72,7 @@ namespace Servicos
 
         }
 
-        private Boolean consultaVeicular(string url, string query)
+        private string consultaVeicular(string url, string query)
         {
             // Declarações necessárias
             Stream requestStream = null;
@@ -148,15 +157,15 @@ namespace Servicos
                 if (retorno.Count > 0)
                     if (retorno[10] == "" || retorno[9] == "" || retorno[8] == "" || retorno[7] == "")
                     {
-                        return true;
+                        return "semRestricao";
                     }
                     else
                     {
-                        return true;
+                        return "comRestricao";
                     }
                 else
                 {
-                    return false;
+                    return "naoExiste";
                 }
 
             }
@@ -176,7 +185,7 @@ namespace Servicos
                 if (reader != null)
                     reader.Close();
             }
-            return false;
+            return "naoExiste";
         }
 
         //Função para retirar o HTML e deixar só o filé...
